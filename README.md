@@ -7,6 +7,5 @@ To make it works, you need to :
 - Assign a float curve to the actor's ripple curve slot (timeline will read this float curve value)
 - In BP_Projectile, call "Ripple Effect" function when the ball get hit. Send the hit location into Ripple Effect function
 
+![RippleHit](https://github.com/TimChen1383/RippleHit/assets/37008451/dc72805d-d3e5-41be-a0fb-75db0605bf83)
 
- 
-![RippleHit](https://github.com/TimChen1383/HitRipple/assets/37008451/41890dc4-2cfb-4efe-8b53-bd25a0bd38c0)
