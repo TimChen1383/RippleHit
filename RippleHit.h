@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/TimelineComponent.h"
 #include "RippleHit.generated.h"
 
 UCLASS()
@@ -31,10 +32,24 @@ public:
 	UPROPERTY(EditAnywhere, Category="Ripple Hit")
 	UStaticMeshComponent* RippleObject = nullptr;
 
-	//UPROPERTY()
-	//UMaterialInstance* DynamicMaterial = nullptr;
+	//Assign Curve float for ripple
+	UPROPERTY(EditAnywhere, Category="Ripple Hit");
+	UCurveFloat* RippleCurve = nullptr;
+
+	FTimeline RippleTimeline;
+
+	UMaterialInstanceDynamic* DynamicMaterial;
 
 	//Hit event for bullet to trigger
 	UFUNCTION(BlueprintCallable, Category = "Ripple Hit")
 	void RippleEffect(FVector HitPosition);
+
+	UFUNCTION()
+	void RippleUpdate(float Alpha);
+
+	UFUNCTION()
+	void RippleFinish();
+
+	float RadiusValue;
+	
 };

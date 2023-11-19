@@ -18,22 +18,49 @@ ARippleHit::ARippleHit()
 void ARippleHit::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//Bind event to timeline's attribute
+	FOnTimelineFloat ProgressUpdate;
+	ProgressUpdate.BindUFunction(this, FName("RippleUpdate"));
+
+	FOnTimelineEvent FinishEvent;
+	FinishEvent.BindUFunction(this, FName("RippleFinish"));
+
+	//Key ripple value update function
+	RippleTimeline.AddInterpFloat(RippleCurve, ProgressUpdate);
+	RippleTimeline.SetTimelineFinishedFunc(FinishEvent);
 }
 
 // Called every frame
 void ARippleHit::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	RippleTimeline.TickTimeline(DeltaTime);
 
 }
 
 void ARippleHit::RippleEffect(FVector HitPosition)
 {
 	//Send hit position from bullet to ripple material
-	auto DynamicMaterial = RippleObject->CreateDynamicMaterialInstance(0, RippleMaterial);
+	DynamicMaterial = RippleObject->CreateDynamicMaterialInstance(0, RippleMaterial);
 	DynamicMaterial->SetVectorParameterValue("Center", HitPosition);
-	RippleObject->SetMaterial(0, DynamicMaterial);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("update material"));
 
+	//Run custom timeline
+	RippleTimeline.PlayFromStart();
+
+	RippleObject->SetMaterial(0, DynamicMaterial);
+	
+
+}
+
+void ARippleHit::RippleUpdate(float Alpha)
+{
+	DynamicMaterial->SetScalarParameterValue("Radius", Alpha);
+	
+}
+
+void ARippleHit::RippleFinish()
+{
 }
 
